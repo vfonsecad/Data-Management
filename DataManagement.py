@@ -136,21 +136,3 @@ for core_folder in core_folders:
 log_txt.write("Process finished")
 log_txt.close()
 
-
-# -- Correct Log errors
-
-fol = "D:\\Google Drive\\KUL PhD\\Programming\\Data\\MilkingRobot\\VISNIR (Data 2010)"
-file_in = fol + "\\readme.txt"
-with open(file_in) as f:
-    file_content = f.readlines()
-lines_content = [line.replace("\n", "").split(";") for line in file_content if not ("FOLDER_ID" in line or "file_name" in line)]
-name_in_readme = sorted([x[0] for x in lines_content])
-descrip_in_readme = [len(x[1]) > 2 for x in lines_content if len(x) > 1]
-name_in_corefolder = sorted(os.listdir(fol))
-name_in_corefolder.remove("readme.txt")
-
-# Conditions to check
-print(not(name_in_corefolder == name_in_readme))
-print(sum(descrip_in_readme) != len(name_in_readme))
-
-
