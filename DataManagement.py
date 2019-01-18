@@ -74,7 +74,7 @@ kk = 1
 base_id = "0000"
 for core_folder in core_folders_new:
     file_in = core_folder[0] + "\\readme.txt"
-    current_ID = "19_01_17_"+ base_id[0:(4-len(str(kk)))] + str(kk)
+    current_ID = today + "_" + base_id[0:(4-len(str(kk)))] + str(kk)
     kk += 1
     with open(file_in, "a") as f:
         f.write("\nFOLDER_ID;"+current_ID+";\n")
@@ -115,11 +115,42 @@ file_CoreFolders_txt.close()
 
 # --- Verify that all core folders have a well defined readme.txt file
 
-for core_folder in core_folders[0:1]:
+log_txt = open("D:\\Google Drive\\KUL PhD\\DataManagementSystem\\InfoFiles\\log.txt", "w")
+
+for core_folder in core_folders:
     file_in = core_folder[0] + "\\readme.txt"
     with open(file_in) as f:
         file_content = f.readlines()
-        files_in_readme = [[line.split(";")[0], len(line.split(";"))] for line in file_content if not("FOLDER_ID" in line or "file_name" in line)]
+    lines_content = [line.replace("\n","").split(";") for line in file_content if not("FOLDER_ID" in line or "file_name" in line)]
+    name_in_readme = sorted([x[0] for x in lines_content])
+    descrip_in_readme = [len(x[1])>2 for x in lines_content if len(x)>1]
+    name_in_corefolder = sorted([f for f in os.listdir(core_folder[0]) if not f.startswith(".")])
+    name_in_corefolder.remove("readme.txt")
+    # Conditions to check
+    if not(name_in_corefolder == name_in_readme):
+        log_txt.write(core_folder[0] + "; Files in readme not the same as files in core folder\n")
+        log_txt.write("-- Files in core folder: " + " -- ".join(name_in_corefolder) + "\n")
+        log_txt.write("-- Files in readme file: " + " -- ".join(name_in_readme) + "\n")
+    if sum(descrip_in_readme)!=len(name_in_readme):
+        log_txt.write(core_folder[0] + "; Not all files contain description\n")
+log_txt.write("Process finished")
+log_txt.close()
 
+
+# -- Correct Log errors
+
+fol = "D:\\Google Drive\\KUL PhD\\Programming\\Data\\MilkingRobot\\VISNIR (Data 2010)"
+file_in = fol + "\\readme.txt"
+with open(file_in) as f:
+    file_content = f.readlines()
+lines_content = [line.replace("\n", "").split(";") for line in file_content if not ("FOLDER_ID" in line or "file_name" in line)]
+name_in_readme = sorted([x[0] for x in lines_content])
+descrip_in_readme = [len(x[1]) > 2 for x in lines_content if len(x) > 1]
+name_in_corefolder = sorted(os.listdir(fol))
+name_in_corefolder.remove("readme.txt")
+
+# Conditions to check
+print(not(name_in_corefolder == name_in_readme))
+print(sum(descrip_in_readme) != len(name_in_readme))
 
 
