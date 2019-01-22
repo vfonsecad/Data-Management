@@ -104,7 +104,7 @@ for core_folder in core_folders:
                 n_modifications = int(line_components[3])+1
             else:
                 n_modifications = int(line_components[3])
-            line_update = core_folder_id + ";" + core_folder[0] + ";" + line_components[2] +";" +str(n_modifications) + ";\n"
+            line_update = core_folder_id + ";" + core_folder[0] + ";" + description[0].split("\n")[0] +";" +str(n_modifications) + ";\n"
         else:
             line_update = core_folder_id +";" + core_folder[0] + ";" + description[0].split("\n")[0] +";" +"0" + ";\n"
 
