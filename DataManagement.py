@@ -12,6 +12,10 @@ import os
 import datetime
 
 
+# --- Home directory
+
+homedir = '/home/valeria/vfonsecad/KUL_PhD'
+
 # --- Get current date
 
 date_now = datetime.datetime.now()
@@ -20,13 +24,13 @@ if date_now.month < 10:
 else:
     month = str(date_now.month)
 
-today = str(date_now.year)[-2:] + "_" + month + "_" +  str(date_now.day)
+today = str(date_now.year) + "_" + month + "_" +  str(date_now.day)
 
 
 # --- Get all  core folders (i.e that will be assigned an ID)
 
 core_folders=list()
-for root, dirs, files in os.walk('D:\Google Drive\KUL PhD\Programming'):
+for root, dirs, files in os.walk(homedir + '/Programming'):
     current_list = [root, dirs, files]
     if 'readme.txt' in current_list[2]:
         core_folders.append(current_list)
@@ -36,7 +40,7 @@ for root, dirs, files in os.walk('D:\Google Drive\KUL PhD\Programming'):
 
 
 for core_folder in core_folders:
-    file_in = core_folder[0] + "\\readme.txt"
+    file_in = core_folder[0] + "/readme.txt"
     f = open(file_in, "r")
     lines = f.readlines()
     f.close()
@@ -58,7 +62,7 @@ for core_folder in core_folders:
 
 core_folders_new = list()
 for core_folder in core_folders:
-    file_in = core_folder[0] + "\\readme.txt"
+    file_in = core_folder[0] + "/readme.txt"
     with open(file_in) as f:
         content = f.readlines()
         add = "FOLDER_ID" not in [line.split(";")[0] for line in content]
@@ -73,7 +77,7 @@ for core_folder in core_folders:
 kk = 1
 base_id = "0000"
 for core_folder in core_folders_new:
-    file_in = core_folder[0] + "\\readme.txt"
+    file_in = core_folder[0] + "/readme.txt"
     current_ID = today + "_" + base_id[0:(4-len(str(kk)))] + str(kk)
     kk += 1
     with open(file_in, "a") as f:
@@ -81,15 +85,15 @@ for core_folder in core_folders_new:
 
 # --- Update compilation of core folders id
 
-file_CoreFolders_txt = open("D:\\Google Drive\\KUL PhD\\DataManagementSystem\\InfoFiles\\CoreFolders.txt", "r")
+file_CoreFolders_txt = open(homedir + "/DataManagementSystem/InfoFiles/CoreFolders.txt", "r")
 CoreFolders_txt_lines = file_CoreFolders_txt.readlines()
 file_CoreFolders_txt.close()
 all_ids = [line.split(";")[0] for line in CoreFolders_txt_lines] ## All current id's
-file_CoreFolders_txt = open("D:\\Google Drive\\KUL PhD\\DataManagementSystem\\InfoFiles\\CoreFolders.txt", "w")
+file_CoreFolders_txt = open(homedir + "/DataManagementSystem/InfoFiles/CoreFolders.txt", "w")
 file_CoreFolders_txt.write("FOLDER_ID;FOLDER_PATH;FOLDER_DESCRIPTION;FOLDER_MODIFICATIONS;\n")
 
 for core_folder in core_folders:
-    file_in = core_folder[0] + "\\readme.txt"
+    file_in = core_folder[0] + "/readme.txt"
 
     with open(file_in) as f:
         file_content = f.readlines()
@@ -115,10 +119,10 @@ file_CoreFolders_txt.close()
 
 # --- Verify that all core folders have a well defined readme.txt file
 
-log_txt = open("D:\\Google Drive\\KUL PhD\\DataManagementSystem\\InfoFiles\\log.txt", "w")
+log_txt = open(homedir + "/DataManagementSystem/InfoFiles/log.txt", "w")
 
 for core_folder in core_folders:
-    file_in = core_folder[0] + "\\readme.txt"
+    file_in = core_folder[0] + "/readme.txt"
     with open(file_in) as f:
         file_content = f.readlines()
     lines_content = [line.replace("\n","").split(";") for line in file_content if not("FOLDER_ID" in line or "file_name" in line)]
@@ -133,6 +137,13 @@ for core_folder in core_folders:
         log_txt.write("-- Files in readme file: " + " -- ".join(name_in_readme) + "\n")
     if sum(descrip_in_readme)!=len(name_in_readme):
         log_txt.write(core_folder[0] + "; Not all files contain description\n")
+    # --- Checking error of cor folders are folders of another core folder
+    for ic in range(0,len(core_folder[1])):
+        current_folder = core_folder[0]+"/"+core_folder[1][ic]
+        for root, dirs, files in os.walk(current_folder):
+            current_list = [root, dirs, files]
+            if 'readme.txt' in current_list[2]:
+                log_txt.write(core_folder[0] + "; Found Core folder as subfolder of another core folder \n")
+    
 log_txt.write("Process finished")
 log_txt.close()
-
