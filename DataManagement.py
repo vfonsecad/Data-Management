@@ -125,7 +125,7 @@ for core_folder in core_folders:
     file_in = core_folder[0] + "/readme.txt"
     with open(file_in) as f:
         file_content = f.readlines()
-    lines_content = [line.replace("\n","").split(";") for line in file_content if not("FOLDER_ID" in line or "file_name" in line)]
+    lines_content = [line.replace("\n","").split(";") for line in file_content if not("FOLDER_ID" in line or "file_name" in line or line=="\n")]
     name_in_readme = sorted([x[0] for x in lines_content])
     descrip_in_readme = [len(x[1])>2 for x in lines_content if len(x)>1]
     name_in_corefolder = sorted([f for f in os.listdir(core_folder[0]) if not f.startswith(".")])
