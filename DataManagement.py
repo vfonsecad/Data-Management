@@ -35,6 +35,18 @@ for root, dirs, files in os.walk(homedir + '/Programming'):
     if 'readme.txt' in current_list[2]:
         core_folders.append(current_list)
 
+# --- Get folders that should have readme and dont have it
+
+
+core_folders_noreadme = list()
+
+
+for root, dirs, files in os.walk(homedir + '/Programming'):    
+    files = [x for x in files if not x.startswith(".") and not x.startswith("_")]
+    if len(files)>0 and "readme.txt" not in files and "diaryExperiment.txt" not in files and "/." not in root and "/_" not in root:
+        if sum([x in root for x in core_folders_path])==0:
+            core_folders_noreadme.append(root)
+
 
 # --- Correct FOLDER_ID line and first line after description
 
@@ -128,7 +140,7 @@ for core_folder in core_folders:
     lines_content = [line.replace("\n","").split(";") for line in file_content if not("FOLDER_ID" in line or "file_name" in line or line=="\n")]
     name_in_readme = sorted([x[0] for x in lines_content])
     descrip_in_readme = [len(x[1])>2 for x in lines_content if len(x)>1]
-    name_in_corefolder = sorted([f for f in os.listdir(core_folder[0]) if not f.startswith(".")])
+    name_in_corefolder = sorted([f for f in os.listdir(core_folder[0]) if (not f.startswith(".") and not f.startswith("_"))])
     name_in_corefolder.remove("readme.txt")
     # Conditions to check
     if not(name_in_corefolder == name_in_readme):
