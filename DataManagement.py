@@ -35,6 +35,8 @@ for root, dirs, files in os.walk(homedir + '/Programming'):
     if 'readme.txt' in current_list[2]:
         core_folders.append(current_list)
 
+core_folders_path = [x[0] for x in core_folders]
+
 # --- Get folders that should have readme and dont have it
 
 
@@ -144,9 +146,11 @@ for core_folder in core_folders:
     name_in_corefolder.remove("readme.txt")
     # Conditions to check
     if not(name_in_corefolder == name_in_readme):
+        wrong_in_readme = [x for x in name_in_corefolder if x not in name_in_readme]
+        wrong_in_corefolder = [x for x in name_in_readme if x not in name_in_corefolder]        
         log_txt.write(core_folder[0] + "; Files in readme not the same as files in core folder\n")
-        log_txt.write("-- Files in core folder: " + " -- ".join(name_in_corefolder) + "\n")
-        log_txt.write("-- Files in readme file: " + " -- ".join(name_in_readme) + "\n")
+        log_txt.write("-- Files not in core folder: " + " -- ".join(wrong_in_corefolder) + "\n")
+        log_txt.write("-- Files not in readme file: " + " -- ".join(wrong_in_readme) + "\n")
     if sum(descrip_in_readme)!=len(name_in_readme):
         log_txt.write(core_folder[0] + "; Not all files contain description\n")
     # --- Checking error of cor folders are folders of another core folder
@@ -157,5 +161,10 @@ for core_folder in core_folders:
             if 'readme.txt' in current_list[2]:
                 log_txt.write(core_folder[0] + "; Found Core folder as subfolder of another core folder \n")
     
-log_txt.write("Process finished")
+log_txt.write("\n\n\n\n\n----------------- FOLDERS WITH NO readme.txt ---------------------\n\n")
+                
+for core_folder in core_folders_noreadme:    
+    log_txt.write(core_folder + "\n\n")
+                
+log_txt.write("\n\n\n\n\n-----------------Process finished--------------------\n\n")
 log_txt.close()
