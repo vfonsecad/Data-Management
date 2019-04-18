@@ -149,8 +149,8 @@ for core_folder in core_folders:
         wrong_in_readme = [x for x in name_in_corefolder if x not in name_in_readme]
         wrong_in_corefolder = [x for x in name_in_readme if x not in name_in_corefolder]        
         log_txt.write(core_folder[0] + "; Files in readme not the same as files in core folder\n")
-        log_txt.write("-- Files not in core folder: " + " -- ".join(wrong_in_corefolder) + "\n")
-        log_txt.write("-- Files not in readme file: " + " -- ".join(wrong_in_readme) + "\n")
+        log_txt.write("-- Files in readme NOT in core folder: " + " -- ".join(wrong_in_corefolder) + "\n")
+        log_txt.write("-- Files in core folder NOT in readme: " + " -- ".join(wrong_in_readme) + "\n")
     if sum(descrip_in_readme)!=len(name_in_readme):
         log_txt.write(core_folder[0] + "; Not all files contain description\n")
     # --- Checking error of cor folders are folders of another core folder
