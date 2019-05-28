@@ -44,10 +44,13 @@ core_folders_noreadme = list()
 
 
 for root, dirs, files in os.walk(homedir + '/Programming'):    
-    files = [x for x in files if not x.startswith(".") and not x.startswith("_")]
-    if len(files)>0 and "readme.txt" not in files and "diaryExperiment.txt" not in files and "/." not in root and "/_" not in root:
-        if sum([x in root for x in core_folders_path])==0:
-            core_folders_noreadme.append(root)
+    
+    if "LIBRA_20160628" not in root:
+                
+        files = [x for x in files if not x.startswith(".") and not x.startswith("_")]
+        if len(files)>0 and "readme.txt" not in files and "diaryExperiment.txt" not in files and "/." not in root and "/_" not in root:
+            if sum([x in root for x in core_folders_path])==0:
+                core_folders_noreadme.append(root)
 
 
 # --- Correct FOLDER_ID line and first line after description
