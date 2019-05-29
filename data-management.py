@@ -14,7 +14,7 @@ import datetime
 
 # --- Home directory
 
-homedir = '/home/valeria/vfonsecad/KUL_PhD'
+homedir = '/home/valeria/vfonsecad/kul_phd'
 
 # --- Get current date
 
@@ -30,7 +30,7 @@ today = str(date_now.year) + "_" + month + "_" +  str(date_now.day)
 # --- Get all  core folders (i.e that will be assigned an ID)
 
 core_folders=list()
-for root, dirs, files in os.walk(homedir + '/Programming'):
+for root, dirs, files in os.walk(homedir + '/programming'):
     current_list = [root, dirs, files]
     if 'readme.txt' in current_list[2]:
         core_folders.append(current_list)
@@ -43,12 +43,12 @@ core_folders_path = [x[0] for x in core_folders]
 core_folders_noreadme = list()
 
 
-for root, dirs, files in os.walk(homedir + '/Programming'):    
+for root, dirs, files in os.walk(homedir + '/programming'):
     
     if "LIBRA_20160628" not in root:
                 
         files = [x for x in files if not x.startswith(".") and not x.startswith("_")]
-        if len(files)>0 and "readme.txt" not in files and "diaryExperiment.txt" not in files and "/." not in root and "/_" not in root:
+        if len(files)>0 and "readme.txt" not in files and "diary-experiment.txt" not in files and "/." not in root and "/_" not in root:
             if sum([x in root for x in core_folders_path])==0:
                 core_folders_noreadme.append(root)
 
@@ -102,11 +102,11 @@ for core_folder in core_folders_new:
 
 # --- Update compilation of core folders id
 
-file_CoreFolders_txt = open(homedir + "/DataManagementSystem/InfoFiles/CoreFolders.txt", "r")
+file_CoreFolders_txt = open(homedir + "/data-management-system/info-files/core-folders.txt", "r")
 CoreFolders_txt_lines = file_CoreFolders_txt.readlines()
 file_CoreFolders_txt.close()
 all_ids = [line.split(";")[0] for line in CoreFolders_txt_lines] ## All current id's
-file_CoreFolders_txt = open(homedir + "/DataManagementSystem/InfoFiles/CoreFolders.txt", "w")
+file_CoreFolders_txt = open(homedir + "/data-management-system/info-files/core-folders.txt", "w")
 file_CoreFolders_txt.write("FOLDER_ID;FOLDER_PATH;FOLDER_DESCRIPTION;FOLDER_MODIFICATIONS;\n")
 
 for core_folder in core_folders:
@@ -136,7 +136,7 @@ file_CoreFolders_txt.close()
 
 # --- Verify that all core folders have a well defined readme.txt file
 
-log_txt = open(homedir + "/DataManagementSystem/InfoFiles/log.txt", "w")
+log_txt = open(homedir + "/data-management-system/info-files/log.txt", "w")
 
 for core_folder in core_folders:
     file_in = core_folder[0] + "/readme.txt"
